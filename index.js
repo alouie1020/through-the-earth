@@ -9,3 +9,39 @@ function initMap() {
         geocodeAddress(geocoder, map);
     });
 }
+
+// Geocodes address (takes location and returns latitude and longitude)
+// Places markers on user's location and the antipode 
+function geocodeAddress(geocoder, resultsMap) {
+    let address = $('.js-location').val();
+    geocoder.geocode({ 'address': address }, function (results, status) {
+        const latitude = results[0].geometry.location.lat();
+        const longitude = results[0].geometry.location.lng();
+        onWater(latitude, longitude, displayIfOnWater);
+
+        // creates marker for User's Location 
+        if (status === 'OK') {
+            const userLocation = new google.maps.Marker({
+                map: resultsMap,
+                position: results[0].geometry.location
+            });
+
+            // creates marker for antipode. Longitude calculated differently depending on user's location's longitude 
+            if (longitude <= 0) {
+                let antipodeLng = longitude + 180;
+                const antipodeMarker = new google.maps.Marker({
+                    map: resultsMap,
+                    position: { lat: latitude * -1, lng: antipodeLng }
+                });
+            } else {
+                let antipodeLng = longitude - 180;
+                const antipodeMarker = new google.maps.Marker({
+                    map: resultsMap,
+                    position: { lat: latitude * -1, lng: antipodeLng }
+                });
+            }
+        } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+        }
+    });
+}
