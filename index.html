@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Through the Earth</title>
+    <meta name="description" content="If you fell through the Earth, where would you land?">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+    <div class="user-input">
+        <h1>If you fell through the Earth, where would you land?</h1>
+        <form class="js-form">
+            <input type="text" class="js-location" placeholder="enter your location" required />
+            <button type="submit" class="js-submit-button">fall</button>
+        </form>
+    </div>
+
+    <div id="map">
+    </div>
+
+    <div class="results">
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+
+    <script src="index.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCoooQtUyMqYwPIECTYKtnF3xxo4b56_KE&callback=initMap"></script>
+</body>
+
+</html>
