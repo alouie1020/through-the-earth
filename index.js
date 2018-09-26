@@ -15,10 +15,10 @@ function initMap() {
 function geocodeAddress(geocoder, resultsMap) {
     let address = $('.js-location').val();
     geocoder.geocode({ 'address': address }, function (results, status) {
-        const latitude = results[0].geometry.location.lat();
+        const antipodeLat = results[0].geometry.location.lat() * -1;
         const longitude = results[0].geometry.location.lng();
-        onWater(latitude, longitude, displayIfOnWater);
 
+        // onWater(antipodeLat, longitude, displayIfOnWater);
         // creates marker for User's Location 
         if (status === 'OK') {
             const userLocation = new google.maps.Marker({
@@ -31,17 +31,36 @@ function geocodeAddress(geocoder, resultsMap) {
                 let antipodeLng = longitude + 180;
                 const antipodeMarker = new google.maps.Marker({
                     map: resultsMap,
-                    position: { lat: latitude * -1, lng: antipodeLng }
+                    position: { lat: antipodeLat, lng: antipodeLng }
                 });
+                onWater(antipodeLat, antipodeLng, displayIfOnWater);
             } else {
                 let antipodeLng = longitude - 180;
                 const antipodeMarker = new google.maps.Marker({
                     map: resultsMap,
-                    position: { lat: latitude * -1, lng: antipodeLng }
+                    position: { lat: antipodeLat, lng: antipodeLng }
                 });
+                onWater(antipodeLat, antipodeLng, displayIfOnWater);
             }
         } else {
             alert('Geocode was not successful for the following reason: ' + status);
         }
     });
+}
+
+// Determines if antipode is on water or land using Onwater.io API 
+function onWater(lat, lon, callback) {
+    const query = {
+        access_token: 'BxRSa6b5bsKFNaYhneVU'
+    };
+    $.getJSON(`https://api.onwater.io/api/v1/results/${lat},${lon}`, query, callback);
+}
+
+// 
+function displayIfOnWater(data) {
+    $('.results').append(`
+        <div class="js-on-water">
+            <h2>Oh no! You're in water!</h2>
+        </div>
+    `)
 }
