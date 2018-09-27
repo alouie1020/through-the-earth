@@ -6,6 +6,7 @@ function initMap() {
     const geocoder = new google.maps.Geocoder();
     $('.js-form').on('click', '.js-submit-button', function (event) {
         event.preventDefault();
+        $('.results').html('');
         geocodeAddress(geocoder, map);
     });
 }
@@ -32,19 +33,24 @@ function geocodeAddress(geocoder, resultsMap) {
                     map: resultsMap,
                     position: { lat: antipodeLat, lng: antipodeLng }
                 });
-                onWater(antipodeLat, antipodeLng, displayIfOnWater);
+                runFunctionsByLatLng(antipodeLat, antipodeLng);
             } else {
                 let antipodeLng = longitude - 180;
                 const antipodeMarker = new google.maps.Marker({
                     map: resultsMap,
                     position: { lat: antipodeLat, lng: antipodeLng }
                 });
-                onWater(antipodeLat, antipodeLng, displayIfOnWater);
+                runFunctionsByLatLng(antipodeLat, antipodeLng);
             }
         } else {
             alert('Geocode was not successful for the following reason: ' + status);
         }
     });
+}
+
+function runFunctionsByLatLng(antipodeLat, antipodeLng) {
+    onWater(antipodeLat, antipodeLng, displayIfOnWater);
+    getWeatherData(antipodeLat, antipodeLng, displayWeather);
 }
 
 // Determines if antipode is on water or land using Onwater.io API 
@@ -63,18 +69,18 @@ function displayIfOnWater(data) {
                 <h2>Oh no! You're in water!</h2>
             </div>
         `)
-      }
-      else if (data.water === false) {
+    }
+    else if (data.water === false) {
         displayAntipodeLocation(data.lat, data.lon);
-      }
-      else {
+    }
+    else {
         $('.results').append(`
             <div class="js-on-water">
                 <h2>Oh no! You're in Antarctica!</h2>
             </div>
         `)
-      }
     }
+}
 
 // Reverse geocodes location to determine on which region/country the user's antipode is  
 function displayAntipodeLocation(lat, lng) {
@@ -97,30 +103,30 @@ function displayAntipodeLocation(lat, lng) {
 
 // calculates date to 1 month before
 function calculateDate() {
-    const oneMonthAgo = new Date(); oneMonthAgo.setDate(oneMonthAgo.getDate() - 30); 
-      let date = oneMonthAgo.getFullYear()+'-'+(oneMonthAgo.getMonth()+1)+'-'+ oneMonthAgo.getDate();
+    const oneMonthAgo = new Date(); oneMonthAgo.setDate(oneMonthAgo.getDate() - 30);
+    let date = oneMonthAgo.getFullYear() + '-' + (oneMonthAgo.getMonth() + 1) + '-' + oneMonthAgo.getDate();
     return date;
-  }
+}
 
 function getNewsData(region, callback) {
     const newsURL = 'https://newsapi.org/v2/everything';
     const query = {
-      sources: 'bbc-news',
-      q: `${region}`,
-      from: calculateDate,
-      sortBy: 'popularity',
-      apiKey: '91458b185408465cb08d08d18edeba07'
+        sources: 'bbc-news',
+        q: `${region}`,
+        from: calculateDate,
+        sortBy: 'popularity',
+        apiKey: '91458b185408465cb08d08d18edeba07'
     }
     $.getJSON(newsURL, query, callback);
-  }
-  
-  function displayNews(data) {
-    const firstFiveArticles = data.articles.slice(0,5);
+}
+
+function displayNews(data) {
+    const firstFiveArticles = data.articles.slice(0, 5);
     const results = firstFiveArticles.map(article => renderNews(article));
     $('.results').append(results);
-  }
-  
-  function renderNews(article) {
+}
+
+function renderNews(article) {
     return `
       <div class="js-news">
         <img src="${article.urlToImage}" alt="article-title">
@@ -128,4 +134,26 @@ function getNewsData(region, callback) {
         ${article.description}
       </div>
     `
-  }
+}
+
+function getWeatherData(lat, lng, callback) {
+    const weatherURL = 'https://api.weatherbit.io/v2.0/current';
+    const query = {
+        units: 'I',
+        lat: `${lat}`,
+        lon: `${lng}`,
+        key: 'abef0b511e52490c9e6af27a61632a7c'
+    };
+    $.getJSON(weatherURL, query, callback);
+}
+
+function displayWeather(data) {
+    console.log(data);
+    $('.results').append(`
+        <div class="weather">
+            It is currently ${data.data[0].temp}&#176; F<br />
+            ${data.data[0].weather.description} <br />
+            Chance of Rain: ${data.data[0].precip}%
+        </div>
+    `);
+}
