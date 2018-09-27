@@ -83,12 +83,19 @@ function displayAntipodeLocation(lat, lng) {
     });
 }
 
+// calculates date to 1 month before
+function calculateDate() {
+    const oneMonthAgo = new Date(); oneMonthAgo.setDate(oneMonthAgo.getDate() - 30); 
+      let date = oneMonthAgo.getFullYear()+'-'+(oneMonthAgo.getMonth()+1)+'-'+ oneMonthAgo.getDate();
+    return date;
+  }
+
 function getNewsData(region, callback) {
     const newsURL = 'https://newsapi.org/v2/everything';
     const query = {
       sources: 'bbc-news',
       q: `${region}`,
-      from: '2018-08-27',
+      from: calculateDate,
       sortBy: 'popularity',
       apiKey: '91458b185408465cb08d08d18edeba07'
     }
