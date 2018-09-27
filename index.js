@@ -82,3 +82,32 @@ function displayAntipodeLocation(lat, lng) {
         }
     });
 }
+
+function getNewsData(region, callback) {
+    const newsURL = 'https://newsapi.org/v2/everything';
+    const query = {
+      sources: 'bbc-news',
+      q: `${region}`,
+      from: '2018-08-27',
+      sortBy: 'popularity',
+      apiKey: '91458b185408465cb08d08d18edeba07'
+    }
+    $.getJSON(newsURL, query, callback);
+  }
+  
+  function displayNews(data) {
+    const firstFiveArticles = data.articles.slice(0,5);
+    const results = firstFiveArticles.map(article => renderNews(article));
+    $('.results').append(results);
+  }
+  
+  function renderNews(article) {
+    return `
+      <div class="js-news">
+        <img src="${article.urlToImage}" alt="article-title">
+        <b>${article.title}</b>
+        ${article.description}
+      </div>
+    `
+  }
+  
