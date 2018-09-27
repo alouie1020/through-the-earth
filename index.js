@@ -57,12 +57,24 @@ function onWater(lat, lon, callback) {
 
 // 
 function displayIfOnWater(data) {
-    $('.results').append(`
-        <div class="js-on-water">
-            <h2>Oh no! You're in water!</h2>
-        </div>
-    `)
-}
+    if (data.water === true) {
+        $('.results').append(`
+            <div class="js-on-water">
+                <h2>Oh no! You're in water!</h2>
+            </div>
+        `)
+      }
+      else if (data.water === false) {
+        displayAntipodeLocation(data.lat, data.lon);
+      }
+      else {
+        $('.results').append(`
+            <div class="js-on-water">
+                <h2>Oh no! You're in Antarctica!</h2>
+            </div>
+        `)
+      }
+    }
 
 // Reverse geocodes location to determine on which region/country the user's antipode is  
 function displayAntipodeLocation(lat, lng) {
@@ -117,4 +129,3 @@ function getNewsData(region, callback) {
       </div>
     `
   }
-  
