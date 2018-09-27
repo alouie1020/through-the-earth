@@ -18,7 +18,6 @@ function geocodeAddress(geocoder, resultsMap) {
         const antipodeLat = results[0].geometry.location.lat() * -1;
         const longitude = results[0].geometry.location.lng();
 
-        // onWater(antipodeLat, longitude, displayIfOnWater);
         // creates marker for User's Location 
         if (status === 'OK') {
             const userLocation = new google.maps.Marker({
@@ -64,3 +63,23 @@ function displayIfOnWater(data) {
         </div>
     `)
 }
+
+// Reverse geocodes location to determine on which region/country the user's antipode is  
+function displayAntipodeLocation(lat, lng) {
+    // console.log(lat, lng);
+    const geocoder = new google.maps.Geocoder();
+    const latlng = { lat: lat, lng: lng };
+    geocoder.geocode({ 'location': latlng }, function (results, status) {
+      if (status === 'OK') {
+        const region = results[results.length - 1].formatted_address;
+        $('.results').append(`
+          <div class="js-antipode-location">
+              <h2>You've landed in ${region}</h2>
+          </div>
+        `);
+        getNewsData(region, displayNews);
+      } else {
+        window.alert('Geocoder failed due to: ' + status);
+      }
+    });
+  }
