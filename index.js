@@ -1,7 +1,4 @@
-const mapMarkers = {
-    userLocation: null, 
-    antipodeMarker: null,
-};
+let MARKERS = [];
 
 function initMap() {
     const map = new google.maps.Map(document.getElementById('map'), {
@@ -12,6 +9,7 @@ function initMap() {
     $('.js-form').on('click', '.js-submit-button', function (event) {
         event.preventDefault();
         $('.results').html('');
+        deleteMarkers();
         geocodeAddress(geocoder, map);
     });
 }
@@ -23,15 +21,11 @@ function geocodeAddress(geocoder, resultsMap) {
     geocoder.geocode({ 'address': address }, function (results, status) {
         const antipodeLat = results[0].geometry.location.lat() * -1;
         const longitude = results[0].geometry.location.lng();
-
+        
         // creates marker for User's Location 
         if (status === 'OK') {
-            // mapMarkers.userLocation = null; 
-            // mapMarkers.antipodeMarker = null;
-            mapMarkers.userLocation = new google.maps.Marker({
-                map: resultsMap,
-                position: results[0].geometry.location
-            });
+            const userLocation = results[0].geometry.location;
+            addMarkers(userLocation, resultsMap);
 
             // creates marker for antipode. Longitude calculated differently depending on user's location's longitude 
             let antipodeLng;
@@ -40,15 +34,32 @@ function geocodeAddress(geocoder, resultsMap) {
             } else {
                 antipodeLng = longitude - 180;
             } 
-            mapMarkers.antipodeMarker = new google.maps.Marker({
-                map: resultsMap,
-                position: { lat: antipodeLat, lng: antipodeLng }
-            });
+            const antipodeMarker = { lat: antipodeLat, lng: antipodeLng };
+            addMarkers(antipodeMarker, resultsMap);
             runFunctionsByLatLng(antipodeLat, antipodeLng);
         } else {
             alert('Geocode was not successful for the following reason: ' + status);
         }
     });
+}
+
+function addMarkers(location, map) {
+    const marker = new google.maps.Marker({
+        position: location, 
+        map: map
+    });
+    MARKERS.push(marker);
+}
+
+function setMapOnAll(map) {
+    for (let i = 0; i < MARKERS.length; i++) {
+        MARKERS[i].setMap(map);
+    }
+}
+
+function deleteMarkers() {
+    setMapOnAll(null);
+    MARKERS = [];
 }
 
 function runFunctionsByLatLng(antipodeLat, antipodeLng) {
