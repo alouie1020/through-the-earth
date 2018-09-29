@@ -1,3 +1,8 @@
+const mapMarkers = {
+    userLocation: null, 
+    antipodeMarker: null,
+};
+
 function initMap() {
     const map = new google.maps.Map(document.getElementById('map'), {
         zoom: 1,
@@ -21,27 +26,25 @@ function geocodeAddress(geocoder, resultsMap) {
 
         // creates marker for User's Location 
         if (status === 'OK') {
-            const userLocation = new google.maps.Marker({
+            // mapMarkers.userLocation = null; 
+            // mapMarkers.antipodeMarker = null;
+            mapMarkers.userLocation = new google.maps.Marker({
                 map: resultsMap,
                 position: results[0].geometry.location
             });
 
             // creates marker for antipode. Longitude calculated differently depending on user's location's longitude 
+            let antipodeLng;
             if (longitude <= 0) {
-                let antipodeLng = longitude + 180;
-                const antipodeMarker = new google.maps.Marker({
-                    map: resultsMap,
-                    position: { lat: antipodeLat, lng: antipodeLng }
-                });
-                runFunctionsByLatLng(antipodeLat, antipodeLng);
+                antipodeLng = longitude + 180;
             } else {
-                let antipodeLng = longitude - 180;
-                const antipodeMarker = new google.maps.Marker({
-                    map: resultsMap,
-                    position: { lat: antipodeLat, lng: antipodeLng }
-                });
-                runFunctionsByLatLng(antipodeLat, antipodeLng);
-            }
+                antipodeLng = longitude - 180;
+            } 
+            mapMarkers.antipodeMarker = new google.maps.Marker({
+                map: resultsMap,
+                position: { lat: antipodeLat, lng: antipodeLng }
+            });
+            runFunctionsByLatLng(antipodeLat, antipodeLng);
         } else {
             alert('Geocode was not successful for the following reason: ' + status);
         }
@@ -149,11 +152,21 @@ function getWeatherData(lat, lng, callback) {
 
 function displayWeather(data) {
     console.log(data);
-    $('.results').append(`
+    if (data.data[0].precip === null) {
+        $('.results').append(`
+            <div class="weather">
+                It is currently ${data.data[0].temp}&#176; F<br />
+                ${data.data[0].weather.description} <br />
+            </div>
+        `);
+    } else {
+        $('.results').append(`
         <div class="weather">
             It is currently ${data.data[0].temp}&#176; F<br />
             ${data.data[0].weather.description} <br />
             Chance of Rain: ${data.data[0].precip}%
         </div>
     `);
+    }
+
 }
