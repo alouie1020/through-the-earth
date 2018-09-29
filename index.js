@@ -9,8 +9,9 @@ function initMap() {
     $('.js-form').on('click', '.js-submit-button', function (event) {
         event.preventDefault();
         $('.results').html('');
-        deleteMarkers();
+        removeMarkers();
         geocodeAddress(geocoder, map);
+        $('.js-location').val('');
     });
 }
 
@@ -51,14 +52,10 @@ function addMarkers(location, map) {
     MARKERS.push(marker);
 }
 
-function setMapOnAll(map) {
+function removeMarkers() {
     for (let i = 0; i < MARKERS.length; i++) {
-        MARKERS[i].setMap(map);
-    }
-}
-
-function deleteMarkers() {
-    setMapOnAll(null);
+        MARKERS[i].setMap(null);
+    };
     MARKERS = [];
 }
 
@@ -179,5 +176,4 @@ function displayWeather(data) {
         </div>
     `);
     }
-
 }
