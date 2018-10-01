@@ -77,7 +77,7 @@ function onWater(lat, lon, callback) {
 // 
 function displayIfOnWater(data) {
     if (data.water === true) {
-        $('.left-col').append(`
+        $('.left-col').prepend(`
             <h2>Location</h2><br />
             Oh no! You're in water! I hope you can swim!
             <hr width=75%  align=center>
@@ -87,7 +87,7 @@ function displayIfOnWater(data) {
         displayAntipodeLocation(data.lat, data.lon);
     }
     else {
-        $('.left-col').append(`
+        $('.left-col').prepend(`
             <h2>Location</h2>
             Oh no! You're in Antarctica!
             <hr width=75%  align=center>
@@ -102,7 +102,7 @@ function displayAntipodeLocation(lat, lng) {
     geocoder.geocode({ 'location': latlng }, function (results, status) {
         if (status === 'OK') {
             const region = results[results.length - 1].formatted_address;
-            $('.left-col').append(`
+            $('.left-col').prepend(`
                 <h2>Location</h2><br />
                 You've landed in ${region}
                 <hr width=75%  align=center>
