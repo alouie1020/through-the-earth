@@ -8,7 +8,7 @@ function initMap() {
     const geocoder = new google.maps.Geocoder();
     $('.js-form').on('click', '.js-submit-button', function (event) {
         event.preventDefault();
-        $('.results').html('');
+        $('.col').html('');
         removeMarkers();
         geocodeAddress(geocoder, map);
         $('.js-location').val('');
@@ -22,7 +22,7 @@ function geocodeAddress(geocoder, resultsMap) {
     geocoder.geocode({ 'address': address }, function (results, status) {
         const antipodeLat = results[0].geometry.location.lat() * -1;
         const longitude = results[0].geometry.location.lng();
-        
+
         // creates marker for User's Location 
         if (status === 'OK') {
             const userLocation = results[0].geometry.location;
@@ -34,7 +34,7 @@ function geocodeAddress(geocoder, resultsMap) {
                 antipodeLng = longitude + 180;
             } else {
                 antipodeLng = longitude - 180;
-            } 
+            }
             const antipodeMarker = { lat: antipodeLat, lng: antipodeLng };
             addMarkers(antipodeMarker, resultsMap);
             runFunctionsByLatLng(antipodeLat, antipodeLng);
@@ -46,7 +46,7 @@ function geocodeAddress(geocoder, resultsMap) {
 
 function addMarkers(location, map) {
     const marker = new google.maps.Marker({
-        position: location, 
+        position: location,
         map: map
     });
     MARKERS.push(marker);
@@ -61,7 +61,9 @@ function removeMarkers() {
 
 function runFunctionsByLatLng(antipodeLat, antipodeLng) {
     onWater(antipodeLat, antipodeLng, displayIfOnWater);
-    getWeatherData(antipodeLat, antipodeLng, displayWeather);
+    window.setTimeout(function () {
+        getWeatherData(antipodeLat, antipodeLng, displayWeather)
+    }, 100);
 }
 
 // Determines if antipode is on water or land using Onwater.io API 
@@ -75,20 +77,20 @@ function onWater(lat, lon, callback) {
 // 
 function displayIfOnWater(data) {
     if (data.water === true) {
-        $('.results').append(`
-            <div class="js-on-water">
-                <h2>Oh no! You're in water!</h2>
-            </div>
+        $('.left-col').append(`
+            <h2>Location</h2><br />
+            Oh no! You're in water! I hope you can swim!
+            <hr width=75%  align=center>
         `)
     }
     else if (data.water === false) {
         displayAntipodeLocation(data.lat, data.lon);
     }
     else {
-        $('.results').append(`
-            <div class="js-on-water">
-                <h2>Oh no! You're in Antarctica!</h2>
-            </div>
+        $('.left-col').append(`
+            <h2>Location</h2>
+            Oh no! You're in Antarctica!
+            <hr width=75%  align=center>
         `)
     }
 }
@@ -100,11 +102,11 @@ function displayAntipodeLocation(lat, lng) {
     geocoder.geocode({ 'location': latlng }, function (results, status) {
         if (status === 'OK') {
             const region = results[results.length - 1].formatted_address;
-            $('.results').append(`
-          <div class="js-antipode-location">
-              <h2>You've landed in ${region}</h2>
-          </div>
-        `);
+            $('.left-col').append(`
+                <h2>Location</h2><br />
+                You've landed in ${region}
+                <hr width=75%  align=center>
+            `);
             getNewsData(region, displayNews);
         } else {
             window.alert('Geocoder failed due to: ' + status);
@@ -134,16 +136,24 @@ function getNewsData(region, callback) {
 function displayNews(data) {
     const firstFiveArticles = data.articles.slice(0, 5);
     const results = firstFiveArticles.map(article => renderNews(article));
-    $('.results').append(results);
+    $('.right-col').append(`
+        <h2>Read the Local News</h2>
+        ${results.join('')}
+    `);
 }
 
 function renderNews(article) {
     return `
-      <div class="js-news">
-        <img src="${article.urlToImage}" alt="article-title">
-        <b>${article.title}</b>
-        ${article.description}
-      </div>
+        <img src="${article.urlToImage}" alt="${article.title}">
+        <div class="about-article">
+            <div class="article-title">
+                <b>${article.title}</b>
+            </div>
+            <div class="article-des">
+                ${article.description}
+            </div>
+        </div>
+        <hr width=75%  align=center>
     `
 }
 
@@ -159,21 +169,22 @@ function getWeatherData(lat, lng, callback) {
 }
 
 function displayWeather(data) {
-    console.log(data);
     if (data.data[0].precip === null) {
-        $('.results').append(`
-            <div class="weather">
-                It is currently ${data.data[0].temp}&#176; F<br />
+        $('.left-col').append(`
+            
+                <h2>Weather</h2>
+                It is currently ${data.data[0].temp}&#176;F<br />
                 ${data.data[0].weather.description} <br />
-            </div>
+            
         `);
     } else {
-        $('.results').append(`
-        <div class="weather">
-            It is currently ${data.data[0].temp}&#176; F<br />
-            ${data.data[0].weather.description} <br />
-            Chance of Rain: ${data.data[0].precip}%
-        </div>
+        $('.left-col').append(`
+            
+                <h2>Weather</h2>
+                It is currently ${data.data[0].temp}&#176; F<br />
+                ${data.data[0].weather.description} <br />
+                Chance of Rain: ${data.data[0].precip}%
+            
     `);
     }
 }

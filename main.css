@@ -1,3 +1,34 @@
+* {
+    box-sizing: border-box;
+  }
+
+html {
+    background-color: white;
+}
+
+body {
+    color: black;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.user-input {
+    width: 500px;
+    /* margin-top: 200px; */
+    margin-left: auto;
+    margin-right: auto;
+    /* margin-bottom: 500px; */
+    text-align: center;
+}
+
+.location-input {
+    width: 100%;
+    display: inline-block;
+}
+
+.submit-button {
+    display: inline-block;
+}
+
 form {
     margin-bottom: 10px;
 }
@@ -5,4 +36,60 @@ form {
 #map {
     height: 450px;
     width: 100%;
+    margin-bottom: 10px;
+}
+
+img {
+    max-width: 150px;
+    float: left;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.article-title {
+    font-family: serif;
+}
+
+.article-des {
+    font-size: 10pt;
+}
+
+/* RESPONSIVE GRID CSS */
+.row {
+    max-width: 1000px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 0;
+    margin-left: auto; 
+    margin-right: auto;
+    margin-bottom: 5px;
+}
+
+.row::before,
+.row::after {
+    display: table;
+    content: '';
+}
+
+.row::after {
+    clear: both;
+}
+
+.col {
+    float: left;
+    padding-left: 1.04166666%;
+    padding-right: 1.04166666%;
+    width: 50%;
+}
+
+.fake-news {
+    background-color: lightblue;
+
+}
+
+/* Mobile Default */
+@media only screen and (max-width: 400px) {
+    .col {
+        width: 100%;
+    }
 }
