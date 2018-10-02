@@ -1,4 +1,6 @@
 let MARKERS = [];
+const userIcon = "";
+const antiIcon = "";
 
 function initMap() {
     const map = new google.maps.Map(document.getElementById('map'), {
@@ -23,12 +25,10 @@ function geocodeAddress(geocoder, resultsMap) {
         const antipodeLat = results[0].geometry.location.lat() * -1;
         const longitude = results[0].geometry.location.lng();
 
-        // creates marker for User's Location 
+        // creates marker for User's Location and antipode
         if (status === 'OK') {
             const userLocation = results[0].geometry.location;
-            addMarkers(userLocation, resultsMap);
-
-            // creates marker for antipode. Longitude calculated differently depending on user's location's longitude 
+            addMarkers(userLocation, userIcon, resultsMap);
             let antipodeLng;
             if (longitude <= 0) {
                 antipodeLng = longitude + 180;
@@ -36,7 +36,7 @@ function geocodeAddress(geocoder, resultsMap) {
                 antipodeLng = longitude - 180;
             }
             const antipodeMarker = { lat: antipodeLat, lng: antipodeLng };
-            addMarkers(antipodeMarker, resultsMap);
+            addMarkers(antipodeMarker, antiIcon, resultsMap);
             runFunctionsByLatLng(antipodeLat, antipodeLng);
         } else {
             alert('Geocode was not successful for the following reason: ' + status);
@@ -44,10 +44,11 @@ function geocodeAddress(geocoder, resultsMap) {
     });
 }
 
-function addMarkers(location, map) {
+function addMarkers(location, icon, map) {
     const marker = new google.maps.Marker({
         position: location,
-        map: map
+        map: map,
+        icon: icon
     });
     MARKERS.push(marker);
 }
@@ -81,7 +82,8 @@ function displayIfOnWater(data) {
             <h2>Location</h2><br />
             Oh no! You're in water! I hope you can swim!
             <hr width=75%  align=center>
-        `)
+        `); 
+        displayEmptyNews();
     }
     else if (data.water === false) {
         displayAntipodeLocation(data.lat, data.lon);
@@ -91,7 +93,8 @@ function displayIfOnWater(data) {
             <h2>Location</h2>
             Oh no! You're in Antarctica!
             <hr width=75%  align=center>
-        `)
+        `);
+        displayEmptyNews();
     }
 }
 
@@ -112,6 +115,38 @@ function displayAntipodeLocation(lat, lng) {
             window.alert('Geocoder failed due to: ' + status);
         }
     });
+}
+
+function getWeatherData(lat, lng, callback) {
+    const weatherURL = 'https://api.weatherbit.io/v2.0/current';
+    const query = {
+        units: 'I',
+        lat: `${lat}`,
+        lon: `${lng}`,
+        key: 'abef0b511e52490c9e6af27a61632a7c'
+    };
+    $.getJSON(weatherURL, query, callback);
+}
+
+function displayWeather(data) {
+    if (data.data[0].precip === null) {
+        $('.left-col').append(`
+            
+                <h2>Weather</h2>
+                It is currently ${data.data[0].temp}&#176;F<br />
+                ${data.data[0].weather.description} <br />
+            
+        `);
+    } else {
+        $('.left-col').append(`
+            
+                <h2>Weather</h2>
+                It is currently ${data.data[0].temp}&#176; F<br />
+                ${data.data[0].weather.description} <br />
+                Chance of Rain: ${data.data[0].precip}%
+            
+    `);
+    }
 }
 
 // calculates date to 1 month before
@@ -157,34 +192,9 @@ function renderNews(article) {
     `
 }
 
-function getWeatherData(lat, lng, callback) {
-    const weatherURL = 'https://api.weatherbit.io/v2.0/current';
-    const query = {
-        units: 'I',
-        lat: `${lat}`,
-        lon: `${lng}`,
-        key: 'abef0b511e52490c9e6af27a61632a7c'
-    };
-    $.getJSON(weatherURL, query, callback);
-}
-
-function displayWeather(data) {
-    if (data.data[0].precip === null) {
-        $('.left-col').append(`
-            
-                <h2>Weather</h2>
-                It is currently ${data.data[0].temp}&#176;F<br />
-                ${data.data[0].weather.description} <br />
-            
-        `);
-    } else {
-        $('.left-col').append(`
-            
-                <h2>Weather</h2>
-                It is currently ${data.data[0].temp}&#176; F<br />
-                ${data.data[0].weather.description} <br />
-                Chance of Rain: ${data.data[0].precip}%
-            
+function displayEmptyNews() {
+    $('.right-col').append(`
+        <h2>Local News</h2>
+        Sorry, there is no news in the Ocean!
     `);
-    }
 }
