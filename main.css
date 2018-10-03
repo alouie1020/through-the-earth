@@ -1,6 +1,6 @@
 * {
     box-sizing: border-box;
-  }
+}
 
 html {
     background-color: #0b121e;
@@ -13,7 +13,7 @@ body {
 }
 
 .footer {
-  height: 500px;
+    height: 500px;
 }
 
 a {
@@ -26,6 +26,27 @@ h1 {
     letter-spacing: 2px;
 }
 
+@keyframes topFadeIn {
+    0% {
+        top: -15px;
+        margin-left: auto;
+        margin-right: auto;
+        opacity: 0;
+    }
+    50% {
+        top: -10px;
+        margin-left: auto;
+        margin-right: auto;
+        opacity: 0.5;
+    }
+    100% {
+        top: 0;
+        margin-left: auto;
+        margin-right: auto;
+        opacity: 1;
+    }
+}
+
 .user-input {
     display: block;
     position: relative;
@@ -35,37 +56,39 @@ h1 {
     margin-right: auto;
     margin-bottom: 500px;
     text-align: center;
+    animation-name: topFadeIn;
+    animation-duration: 2s;
 }
 
 input[type=text] {
-    float:left;
+    float: left;
+    background-color: #0b121e;
+    color: yellow;
+    font-size: 14pt;
+    letter-spacing: 2px;
     width: 75%;
     height: 35px;
-    background-color: #0b121e;
     border-top: 0;
     border-left: 0;
     border-right: 0;
     border-bottom: solid 2px white;
-    color: yellow;
-    font-size: 14pt;
-    letter-spacing: 2px;
     margin-right: 10px;
 }
 
-::placeholder { 
-  color: lightgrey;
-  letter-spacing: 1px;
+::placeholder {
+    color: lightgrey;
+    letter-spacing: 1px;
 }
 
 button {
     float: left;
+    background-color: #0b121e;
+    color: white;
+    font-weight: 900;
+    letter-spacing: 2px;
     width: 20%;
     height: 35px;
     border: solid 2px white;
-    color: white;
-    background-color: #0b121e;
-    font-weight: 900;
-    letter-spacing: 2px;
 }
 
 .scroll-button {
@@ -74,15 +97,15 @@ button {
 
 .before-scroll {
     display: none;
-    position: fixed; 
-    bottom: 25px; 
+    position: fixed;
+    bottom: 25px;
     right: 25px;
 }
 
 .afterScroll {
     display: block;
-    position: fixed; 
-    bottom: 25px; 
+    position: fixed;
+    bottom: 25px;
     right: 25px;
 }
 
@@ -103,8 +126,8 @@ form.example::after {
 }
 
 img {
-    max-width: 150px;
     float: left;
+    max-width: 150px;
     margin-right: 10px;
     margin-bottom: 10px;
 }
@@ -118,12 +141,13 @@ img {
 }
 
 /* RESPONSIVE GRID CSS */
+
 .row {
     max-width: 1000px;
     padding-left: 20px;
     padding-right: 20px;
     margin-top: 0;
-    margin-left: auto; 
+    margin-left: auto;
     margin-right: auto;
     margin-bottom: 5px;
 }
@@ -146,8 +170,8 @@ img {
 }
 
 /* Mobile Default */
-@media only screen and (max-width: 400px) {
 
+@media only screen and (max-width: 400px) {
     .col {
         width: 100%;
     }

@@ -16,76 +16,82 @@ function initListener() {
 function initMap(address) {
   if (address === '') {
     alert('Please Enter Your Location');
-  } else {
+  } 
+  else {
     const map = new google.maps.Map(document.getElementById('map'), {
       zoom: 1,
       center: { lat: 0.0000, lng: 0.0000 }
     });
     const geocoder = new google.maps.Geocoder();
     geocodeAddress(geocoder, map, address);
-    runAnimation();
-    scrollButton();
   }
 }
+// Geocodes address (takes location and returns latitude and longitude)
+// Places markers on user's location and the antipode 
+function geocodeAddress(geocoder, resultsMap, address) {
+  geocoder.geocode({ 'address': address }, function (results, status) {
+    removeMarkers();
+    if (status === 'OK') {
+      const userLocation = results[0].geometry.location;
+      const antipodeLat = results[0].geometry.location.lat() * -1;
+      const longitude = results[0].geometry.location.lng();
+      addMarkers(userLocation, userIcon, resultsMap);
+
+      let antipodeLng;
+      if (longitude <= 0) {
+        antipodeLng = longitude + 180;
+      } 
+      else {
+        antipodeLng = longitude - 180;
+      }
+      const antipodeMarker = { lat: antipodeLat, lng: antipodeLng };
+      addMarkers(antipodeMarker, antiIcon, resultsMap);
+      runFunctionsByLatLng(antipodeLat, antipodeLng);
+      runAnimation();
+      scrollButton();
+    } 
+    else if (status === 'ZERO_RESULTS') {
+      alert("Please Enter Valid Location");
+    }
+    else {
+      alert('Geocode was not successful for the following reason: ' + status);
+    }
+  });
+}
+
 
 function runAnimation() {
   $('html, body').animate({
     scrollTop: $("#map").offset().top
-  }, 200, function() {
+  }, 200, function () {
     $("#map").attr('tabindex', '2');
     $("#map").focus();
   });
 }
 
 function scrollButton() {
-    const scrollButton = $('.js-scroll-button');
-    const pos = scrollButton.position();
-    $(window).scroll(function () {
-        const windowpos = $(window).scrollTop();
-        if (windowpos >= (pos.top - 100)) {
-            scrollButton.addClass('afterScroll');
-        }
-        else {
-            scrollButton.removeClass('afterScroll');
-        }
-    });
-    $('.js-scroll-button').click(function(){
-        $('html, body').animate({
-            scrollTop: 0
-          }, 200, function() {
-            $('#user-input').focus();
-          }
-        );
-        $('.js-main').prop('hidden', true);
-    });
-  }
-
-// Geocodes address (takes location and returns latitude and longitude)
-// Places markers on user's location and the antipode 
-function geocodeAddress(geocoder, resultsMap, address) {
-  geocoder.geocode({ 'address': address }, function (results, status) {
-    removeMarkers();
-    const antipodeLat = results[0].geometry.location.lat() * -1;
-    const longitude = results[0].geometry.location.lng();
-
-    // creates marker for User's Location and antipode
-    if (status === 'OK') {
-      const userLocation = results[0].geometry.location;
-      addMarkers(userLocation, userIcon, resultsMap);
-      let antipodeLng;
-      if (longitude <= 0) {
-        antipodeLng = longitude + 180;
-      } else {
-        antipodeLng = longitude - 180;
-      }
-      const antipodeMarker = { lat: antipodeLat, lng: antipodeLng };
-      addMarkers(antipodeMarker, antiIcon, resultsMap);
-      runFunctionsByLatLng(antipodeLat, antipodeLng);
-    } else {
-      alert('Geocode was not successful for the following reason: ' + status);
+  const scrollButton = $('.js-scroll-button');
+  const pos = scrollButton.position();
+  $(window).scroll(function () {
+    const windowpos = $(window).scrollTop();
+    if (windowpos >= (pos.top - 100)) {
+      scrollButton.addClass('afterScroll');
+    }
+    else {
+      scrollButton.removeClass('afterScroll');
     }
   });
+  $('.js-scroll-button').click(function () {
+    $('html, body').animate({
+      scrollTop: 0
+    }, 200, function () {
+      $('#user-input').focus();
+    }
+    );
+    $('.js-main').prop('hidden', true);
+  });
 }
+
 
 function addMarkers(location, icon, map) {
   const marker = new google.maps.Marker({
@@ -105,9 +111,7 @@ function removeMarkers() {
 
 function runFunctionsByLatLng(antipodeLat, antipodeLng) {
   onWater(antipodeLat, antipodeLng, displayIfOnWater);
-  window.setTimeout(function () {
-    getWeatherData(antipodeLat, antipodeLng, displayWeather)
-  }, 1);
+  getWeatherData(antipodeLat, antipodeLng, displayWeather)
 }
 
 // Determines if antipode is on water or land using Onwater.io API 
@@ -126,7 +130,7 @@ function displayIfOnWater(data) {
         Oh no! You're in Antarctica!
         <br />
         <br />
-         <hr width=75%  align=center />
+         <hr width=75% align=center />
     `);
     displayEmptyNews();
   } else {
@@ -136,7 +140,7 @@ function displayIfOnWater(data) {
             Oh no! You're in water! I hope you can swim!
             <br />
             <br />
-            <hr width=75%  align=center />
+            <hr width=75% align=center />
         `);
       displayEmptyNews();
     }
@@ -158,7 +162,7 @@ function displayAntipodeLocation(lat, lng) {
                 <a href="https://en.wikipedia.org/wiki/${region}">You've landed in ${region}</a>
                 <br />
                 <br />
-                <hr width=75%  align=center>
+                <hr width=75% align=center>
             `);
       getNewsData(region, displayNews);
     } else {
@@ -195,7 +199,6 @@ function displayWeather(data) {
   }
 }
 
-// calculates date to 1 month before
 function calculateDate() {
   const oneMonthAgo = new Date(); oneMonthAgo.setDate(oneMonthAgo.getDate() - 30);
   let date = oneMonthAgo.getFullYear() + '-' + (oneMonthAgo.getMonth() + 1) + '-' + oneMonthAgo.getDate();
@@ -216,7 +219,7 @@ function getNewsData(region, callback) {
 
 function displayNews(data) {
   const firstFiveArticles = data.articles.slice(0, 5);
-  const results = firstFiveArticles.map(article => renderNews(article));
+  const results = firstFiveArticles.map((article) => renderNews(article));
   $('.right-col').append(`
         <h2 tabindex="5">Read the Local News</h2>
         ${results.join('')}
@@ -234,7 +237,7 @@ function renderNews(article) {
                 ${article.description}
             </div>
         </div>
-        <hr width=75%  align=center>
+        <hr width=75% align=center>
     `
 }
 
