@@ -139,6 +139,8 @@ function displayAntipodeLocation(lat, lng) {
       $('.left-col').prepend(`
                 <h2>Location</h2><br />
                 <a href="https://en.wikipedia.org/wiki/${region}">You've landed in ${region}</a>
+                <br />
+                <br />
                 <hr width=75%  align=center>
             `);
       getNewsData(region, displayNews);

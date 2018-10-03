@@ -13,7 +13,7 @@ body {
 }
 
 .footer {
-  height: 600px;
+  height: 500px;
 }
 
 a {
@@ -45,13 +45,15 @@ input[type=text] {
     border-left: 0;
     border-right: 0;
     border-bottom: solid 2px white;
-    color: white;
+    color: yellow;
     font-size: 14pt;
+    letter-spacing: 2px;
     margin-right: 10px;
 }
 
 ::placeholder { 
   color: lightgrey;
+  letter-spacing: 1px;
 }
 
 button {
