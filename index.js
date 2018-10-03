@@ -15,7 +15,7 @@ function initListener() {
 
 function initMap(address) {
   if (address === '') {
-    alert("Please Enter Your Location");
+    alert('Please Enter Your Location');
   } else {
     const map = new google.maps.Map(document.getElementById('map'), {
       zoom: 1,
@@ -29,12 +29,6 @@ function initMap(address) {
 }
 
 function runAnimation() {
-  $(".userInput").animate({
-    top: 600,
-    left: 0
-  });
-  // $('html, body').animate({ scrollTop: $(".js-form").offset({ top: 620, left: 0 })
-  // }, 1000);
   $('html, body').animate({
     scrollTop: $("#map").offset().top
   }, 200, function() {
@@ -44,22 +38,22 @@ function runAnimation() {
 }
 
 function scrollButton() {
-    const scrollButton = $(".js-scroll-button");
+    const scrollButton = $('.js-scroll-button');
     const pos = scrollButton.position();
     $(window).scroll(function () {
         const windowpos = $(window).scrollTop();
         if (windowpos >= (pos.top - 100)) {
-            scrollButton.addClass("afterScroll");
+            scrollButton.addClass('afterScroll');
         }
         else {
-            scrollButton.removeClass("afterScroll");
+            scrollButton.removeClass('afterScroll');
         }
     });
     $('.js-scroll-button').click(function(){
         $('html, body').animate({
             scrollTop: 0
           }, 200, function() {
-            $("#user-input").focus();
+            $('#user-input').focus();
           }
         );
         $('.js-main').prop('hidden', true);
