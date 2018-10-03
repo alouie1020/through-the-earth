@@ -3,12 +3,38 @@
   }
 
 html {
-    background-color: white;
+    background-color: #0b121e;
 }
 
 body {
-    color: black;
-    font-family: 'Open Sans', sans-serif;
+    color: white;
+    /* font-family: 'Open Sans', sans-serif; */
+    font-family: 'Avenir Next', sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+h1 {
+    font-family: 'Patua One', cursive;
+    letter-spacing: 2px;
+}
+
+form.js-form input[type=text] {
+    float:left;
+    width: 80%;
+}
+
+button {
+    float: left;
+    width: 20%;
+}
+
+form.example::after {
+    clear: both;
+    display: table;
 }
 
 .user-input {

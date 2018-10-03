@@ -2,26 +2,48 @@ let MARKERS = [];
 const userIcon = "";
 const antiIcon = "";
 
-function initMap() {
+function initListener() {
+    $('.js-form').on('click', '.js-submit-button', function (event) {
+        let address = $('.js-location').val();
+        event.preventDefault();
+        $('.js-main').prop('hidden', false)
+        $('.col').html('');
+        $('.js-location').val('');
+        initMap(address);
+    });
+}
+
+function initMap(address) {
     const map = new google.maps.Map(document.getElementById('map'), {
         zoom: 1,
         center: { lat: 0.0000, lng: 0.0000 }
     });
     const geocoder = new google.maps.Geocoder();
-    $('.js-form').on('click', '.js-submit-button', function (event) {
-        event.preventDefault();
-        $('.col').html('');
-        removeMarkers();
-        geocodeAddress(geocoder, map);
-        $('.js-location').val('');
-    });
+    geocodeAddress(geocoder, map, address);
+
 }
+
+// function initMap() {
+//     const map = new google.maps.Map(document.getElementById('map'), {
+//         zoom: 1,
+//         center: { lat: 0.0000, lng: 0.0000 }
+//     });
+//     const geocoder = new google.maps.Geocoder();
+//     $('.js-form').on('click', '.js-submit-button', function (event) {
+//         event.preventDefault();
+//         $('.js-main').prop('hidden', false)
+//         $('.col').html('');
+//         geocodeAddress(geocoder, map);
+//         $('.js-location').val('');
+//     });
+// }
 
 // Geocodes address (takes location and returns latitude and longitude)
 // Places markers on user's location and the antipode 
-function geocodeAddress(geocoder, resultsMap) {
-    let address = $('.js-location').val();
+function geocodeAddress(geocoder, resultsMap, address) {
+    // let address = $('.js-location').val();
     geocoder.geocode({ 'address': address }, function (results, status) {
+        removeMarkers();
         const antipodeLat = results[0].geometry.location.lat() * -1;
         const longitude = results[0].geometry.location.lng();
 
@@ -107,7 +129,7 @@ function displayAntipodeLocation(lat, lng) {
             const region = results[results.length - 1].formatted_address;
             $('.left-col').prepend(`
                 <h2>Location</h2><br />
-                You've landed in ${region}
+                <a href="https://en.wikipedia.org/wiki/${region}">You've landed in ${region}</a>
                 <hr width=75%  align=center>
             `);
             getNewsData(region, displayNews);
@@ -131,20 +153,16 @@ function getWeatherData(lat, lng, callback) {
 function displayWeather(data) {
     if (data.data[0].precip === null) {
         $('.left-col').append(`
-            
-                <h2>Weather</h2>
-                It is currently ${data.data[0].temp}&#176;F<br />
-                ${data.data[0].weather.description} <br />
-            
+            <h2>Weather</h2>
+            It is currently ${data.data[0].temp}&#176;F<br />
+            ${data.data[0].weather.description} <br />
         `);
     } else {
         $('.left-col').append(`
-            
-                <h2>Weather</h2>
-                It is currently ${data.data[0].temp}&#176; F<br />
-                ${data.data[0].weather.description} <br />
-                Chance of Rain: ${data.data[0].precip}%
-            
+            <h2>Weather</h2>
+            It is currently ${data.data[0].temp}&#176; F<br />
+            ${data.data[0].weather.description} <br />
+            Chance of Rain: ${data.data[0].precip}%
     `);
     }
 }
@@ -182,7 +200,7 @@ function renderNews(article) {
         <img src="${article.urlToImage}" alt="${article.title}">
         <div class="about-article">
             <div class="article-title">
-                <b>${article.title}</b>
+                <b><a href="${article.url}" target="_blank">${article.title}</a></b>
             </div>
             <div class="article-des">
                 ${article.description}
