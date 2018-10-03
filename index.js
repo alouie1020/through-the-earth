@@ -23,8 +23,8 @@ function initMap(address) {
     });
     const geocoder = new google.maps.Geocoder();
     geocodeAddress(geocoder, map, address);
-
     runAnimation();
+    scrollButton();
   }
 }
 
@@ -37,11 +37,34 @@ function runAnimation() {
   // }, 1000);
   $('html, body').animate({
     scrollTop: $("#map").offset().top
-  }, 200, function () {
-    $("#map").attr('tabindex', '-1');
+  }, 200, function() {
+    $("#map").attr('tabindex', '2');
     $("#map").focus();
   });
 }
+
+function scrollButton() {
+    const scrollButton = $(".js-scroll-button");
+    const pos = scrollButton.position();
+    $(window).scroll(function () {
+        const windowpos = $(window).scrollTop();
+        if (windowpos >= (pos.top - 100)) {
+            scrollButton.addClass("afterScroll");
+        }
+        else {
+            scrollButton.removeClass("afterScroll");
+        }
+    });
+    $('.js-scroll-button').click(function(){
+        $('html, body').animate({
+            scrollTop: 0
+          }, 200, function() {
+            $("#user-input").focus();
+          }
+        );
+        $('.js-main').prop('hidden', true);
+    });
+  }
 
 // Geocodes address (takes location and returns latitude and longitude)
 // Places markers on user's location and the antipode 
@@ -105,7 +128,7 @@ function onWater(lat, lon, callback) {
 function displayIfOnWater(data) {
   if (data === null) {
     $('.left-col').prepend(`
-      <h2>Location</h2>
+      <h2 tabindex="3">Location</h2>
         Oh no! You're in Antarctica!
         <br />
         <br />
@@ -115,7 +138,7 @@ function displayIfOnWater(data) {
   } else {
     if (data.water === true) {
       $('.left-col').prepend(`
-            <h2 tabin>Location</h2><br />
+            <h2 tabindex="3">Location</h2><br />
             Oh no! You're in water! I hope you can swim!
             <br />
             <br />
@@ -137,7 +160,7 @@ function displayAntipodeLocation(lat, lng) {
     if (status === 'OK') {
       const region = results[results.length - 1].formatted_address;
       $('.left-col').prepend(`
-                <h2>Location</h2><br />
+                <h2 tabindex="3">Location</h2><br />
                 <a href="https://en.wikipedia.org/wiki/${region}">You've landed in ${region}</a>
                 <br />
                 <br />
@@ -164,13 +187,13 @@ function getWeatherData(lat, lng, callback) {
 function displayWeather(data) {
   if (data.data[0].precip === null) {
     $('.left-col').append(`
-            <h2>Weather</h2>
+            <h2 tabindex="4">Weather</h2>
             It is currently ${data.data[0].temp}&#176;F<br />
             ${data.data[0].weather.description} <br />
         `);
   } else {
     $('.left-col').append(`
-            <h2>Weather</h2>
+            <h2 tabindex="4">Weather</h2>
             It is currently ${data.data[0].temp}&#176; F<br />
             ${data.data[0].weather.description} <br />
             Chance of Rain: ${data.data[0].precip}%
@@ -201,7 +224,7 @@ function displayNews(data) {
   const firstFiveArticles = data.articles.slice(0, 5);
   const results = firstFiveArticles.map(article => renderNews(article));
   $('.right-col').append(`
-        <h2>Read the Local News</h2>
+        <h2 tabindex="5">Read the Local News</h2>
         ${results.join('')}
     `);
 }
@@ -223,7 +246,7 @@ function renderNews(article) {
 
 function displayEmptyNews() {
   $('.right-col').append(`
-        <h2>Local News</h2>
+        <h2 tabindex="5">Local News</h2>
         Sorry, there is no news in this part of the world!
     `);
 }
