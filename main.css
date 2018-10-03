@@ -1,122 +1,36 @@
 * {
     box-sizing: border-box;
-}
+  }
 
 html {
-    background-color: #0b121e;
+    background-color: white;
 }
 
 body {
-    color: white;
-    /* font-family: 'Open Sans', sans-serif; */
-    font-family: 'Avenir Next', sans-serif;
-}
-
-.footer {
-    height: 500px;
-}
-
-a {
-    text-decoration: none;
-    color: white;
-}
-
-h1 {
-    font-family: 'Patua One', cursive;
-    letter-spacing: 2px;
-}
-
-@keyframes topFadeIn {
-    0% {
-        top: -15px;
-        margin-left: auto;
-        margin-right: auto;
-        opacity: 0;
-    }
-    50% {
-        top: -10px;
-        margin-left: auto;
-        margin-right: auto;
-        opacity: 0.5;
-    }
-    100% {
-        top: 0;
-        margin-left: auto;
-        margin-right: auto;
-        opacity: 1;
-    }
+    color: black;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .user-input {
-    display: block;
-    position: relative;
     width: 500px;
-    margin-top: 200px;
+    /* margin-top: 200px; */
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 500px;
+    /* margin-bottom: 500px; */
     text-align: center;
-    animation-name: topFadeIn;
-    animation-duration: 2s;
-}
-
-input[type=text] {
-    float: left;
-    background-color: #0b121e;
-    color: yellow;
-    font-size: 14pt;
-    letter-spacing: 2px;
-    width: 75%;
-    height: 35px;
-    border-top: 0;
-    border-left: 0;
-    border-right: 0;
-    border-bottom: solid 2px white;
-    margin-right: 10px;
-}
-
-::placeholder {
-    color: lightgrey;
-    letter-spacing: 1px;
-}
-
-button {
-    float: left;
-    background-color: #0b121e;
-    color: white;
-    font-weight: 900;
-    letter-spacing: 2px;
-    width: 20%;
-    height: 35px;
-    border: solid 2px white;
-}
-
-.scroll-button {
-    width: 100px;
-}
-
-.before-scroll {
-    display: none;
-    position: fixed;
-    bottom: 25px;
-    right: 25px;
-}
-
-.afterScroll {
-    display: block;
-    position: fixed;
-    bottom: 25px;
-    right: 25px;
-}
-
-form.example::after {
-    clear: both;
-    display: table;
 }
 
 .location-input {
     width: 100%;
     display: inline-block;
+}
+
+.submit-button {
+    display: inline-block;
+}
+
+form {
+    margin-bottom: 10px;
 }
 
 #map {
@@ -126,8 +40,8 @@ form.example::after {
 }
 
 img {
-    float: left;
     max-width: 150px;
+    float: left;
     margin-right: 10px;
     margin-bottom: 10px;
 }
@@ -141,13 +55,12 @@ img {
 }
 
 /* RESPONSIVE GRID CSS */
-
 .row {
     max-width: 1000px;
     padding-left: 20px;
     padding-right: 20px;
     margin-top: 0;
-    margin-left: auto;
+    margin-left: auto; 
     margin-right: auto;
     margin-bottom: 5px;
 }
@@ -169,8 +82,12 @@ img {
     width: 50%;
 }
 
-/* Mobile Default */
+.fake-news {
+    background-color: lightblue;
 
+}
+
+/* Mobile Default */
 @media only screen and (max-width: 400px) {
     .col {
         width: 100%;
