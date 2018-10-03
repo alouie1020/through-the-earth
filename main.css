@@ -12,6 +12,10 @@ body {
     font-family: 'Avenir Next', sans-serif;
 }
 
+.footer {
+  height: 600px;
+}
+
 a {
     text-decoration: none;
     color: white;
@@ -22,14 +26,43 @@ h1 {
     letter-spacing: 2px;
 }
 
-form.js-form input[type=text] {
+.user-input {
+    position: relative;
+    width: 500px;
+    margin-top: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 500px;
+    text-align: center;
+}
+
+input[type=text] {
     float:left;
-    width: 80%;
+    width: 75%;
+    height: 35px;
+    background-color: #0b121e;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: solid 2px white;
+    color: white;
+    font-size: 14pt;
+    margin-right: 10px;
+}
+
+::placeholder { 
+  color: lightgrey;
 }
 
 button {
     float: left;
     width: 20%;
+    height: 35px;
+    border: solid 2px white;
+    color: white;
+    background-color: #0b121e;
+    font-weight: 900;
+    letter-spacing: 2px;
 }
 
 form.example::after {
@@ -37,26 +70,9 @@ form.example::after {
     display: table;
 }
 
-.user-input {
-    width: 500px;
-    /* margin-top: 200px; */
-    margin-left: auto;
-    margin-right: auto;
-    /* margin-bottom: 500px; */
-    text-align: center;
-}
-
 .location-input {
     width: 100%;
     display: inline-block;
-}
-
-.submit-button {
-    display: inline-block;
-}
-
-form {
-    margin-bottom: 10px;
 }
 
 #map {
@@ -106,11 +122,6 @@ img {
     padding-left: 1.04166666%;
     padding-right: 1.04166666%;
     width: 50%;
-}
-
-.fake-news {
-    background-color: lightblue;
-
 }
 
 /* Mobile Default */

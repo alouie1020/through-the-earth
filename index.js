@@ -14,34 +14,38 @@ function initListener() {
 }
 
 function initMap(address) {
-    const map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 1,
-        center: { lat: 0.0000, lng: 0.0000 }
-    });
-    const geocoder = new google.maps.Geocoder();
-    geocodeAddress(geocoder, map, address);
+    if (address === '') {
+        alert("Please Enter Your Location");
+    } else {
+        const map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 1,
+            center: { lat: 0.0000, lng: 0.0000 }
+        });
+        const geocoder = new google.maps.Geocoder();
+        geocodeAddress(geocoder, map, address);
 
+        runAnimation();
+    }
 }
 
-// function initMap() {
-//     const map = new google.maps.Map(document.getElementById('map'), {
-//         zoom: 1,
-//         center: { lat: 0.0000, lng: 0.0000 }
-//     });
-//     const geocoder = new google.maps.Geocoder();
-//     $('.js-form').on('click', '.js-submit-button', function (event) {
-//         event.preventDefault();
-//         $('.js-main').prop('hidden', false)
-//         $('.col').html('');
-//         geocodeAddress(geocoder, map);
-//         $('.js-location').val('');
-//     });
-// }
+function runAnimation() {
+    $(".userInput").animate({
+        top: 600,
+        left: 0
+    });
+    // $('html, body').animate({ scrollTop: $(".js-form").offset({ top: 620, left: 0 })
+    // }, 1000);
+    $('html, body').animate({
+        scrollTop: $("#map").offset().top
+    }, 200, function () {
+        $("#map").attr('tabindex', '-1');
+        $("#map").focus();
+    });
+}
 
 // Geocodes address (takes location and returns latitude and longitude)
 // Places markers on user's location and the antipode 
 function geocodeAddress(geocoder, resultsMap, address) {
-    // let address = $('.js-location').val();
     geocoder.geocode({ 'address': address }, function (results, status) {
         removeMarkers();
         const antipodeLat = results[0].geometry.location.lat() * -1;
@@ -86,7 +90,7 @@ function runFunctionsByLatLng(antipodeLat, antipodeLng) {
     onWater(antipodeLat, antipodeLng, displayIfOnWater);
     window.setTimeout(function () {
         getWeatherData(antipodeLat, antipodeLng, displayWeather)
-    }, 100);
+    }, 1);
 }
 
 // Determines if antipode is on water or land using Onwater.io API 
@@ -101,10 +105,12 @@ function onWater(lat, lon, callback) {
 function displayIfOnWater(data) {
     if (data.water === true) {
         $('.left-col').prepend(`
-            <h2>Location</h2><br />
+            <h2 tabin>Location</h2><br />
             Oh no! You're in water! I hope you can swim!
-            <hr width=75%  align=center>
-        `); 
+            <br />
+            <br />
+            <hr width=75%  align=center />
+        `);
         displayEmptyNews();
     }
     else if (data.water === false) {
@@ -114,7 +120,9 @@ function displayIfOnWater(data) {
         $('.left-col').prepend(`
             <h2>Location</h2>
             Oh no! You're in Antarctica!
-            <hr width=75%  align=center>
+            <br />
+            <br />
+            <hr width=75%  align=center />
         `);
         displayEmptyNews();
     }
