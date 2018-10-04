@@ -21,11 +21,6 @@ a {
     color: white;
 }
 
-h1 {
-    font-family: 'Patua One', cursive;
-    letter-spacing: 2px;
-}
-
 @keyframes topFadeIn {
     0% {
         top: -15px;
@@ -60,6 +55,11 @@ h1 {
     animation-duration: 2s;
 }
 
+h1 {
+    font-family: 'Patua One', cursive;
+    letter-spacing: 2px;
+}
+
 input[type=text] {
     float: left;
     background-color: #0b121e;
@@ -82,14 +82,24 @@ input[type=text] {
 
 button {
     float: left;
-    background-color: #0b121e;
+    /* background-color: #0b121e; */
     color: white;
     font-weight: 900;
     letter-spacing: 2px;
     width: 20%;
     height: 35px;
     border: solid 2px white;
+    background: #0b121e;
+    transition-property: background;
+    transition-duration: 1s;
+    transition-timing-function: linear;
 }
+
+button:hover {
+    background: white;
+    color: #0b121e;
+  }
+  
 
 .scroll-button {
     width: 100px;
@@ -169,10 +179,34 @@ img {
     width: 50%;
 }
 
+.weather-break {
+    display: none;
+}
+
 /* Mobile Default */
 
-@media only screen and (max-width: 400px) {
+@media only screen and (max-width: 420px) {
+    .user-input {
+        width: 300px;
+        
+    }
+    .h1 {
+        font-size: 14pt;
+    }
     .col {
         width: 100%;
+    }
+    .weather-break {
+        display: block;
+    }
+    
+}
+
+@media only screen and (max-width: 320px) {
+    .user-input {
+        width: 300px;
+    }
+    .h1 {
+        font-size: 8pt;
     }
 }

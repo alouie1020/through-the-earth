@@ -59,7 +59,6 @@ function geocodeAddress(geocoder, resultsMap, address) {
   });
 }
 
-
 function runAnimation() {
   $('html, body').animate({
     scrollTop: $("#map").offset().top
@@ -92,7 +91,6 @@ function scrollButton() {
   });
 }
 
-
 function addMarkers(location, icon, map) {
   const marker = new google.maps.Marker({
     position: location,
@@ -116,13 +114,13 @@ function runFunctionsByLatLng(antipodeLat, antipodeLng) {
 
 // Determines if antipode is on water or land using Onwater.io API 
 function onWater(lat, lon, callback) {
+  const waterURL = 'https://api.onwater.io/api/v1/results/';
   const query = {
     access_token: 'BxRSa6b5bsKFNaYhneVU'
   };
-  $.getJSON(`https://api.onwater.io/api/v1/results/${lat},${lon}`, query, callback);
+  $.getJSON(`${waterURL}${lat},${lon}`, query, callback);
 }
 
-// 
 function displayIfOnWater(data) {
   if (data === null) {
     $('.left-col').prepend(`
@@ -187,7 +185,10 @@ function displayWeather(data) {
     $('.left-col').append(`
             <h2 tabindex="4">Weather</h2>
             It is currently ${data.data[0].temp}&#176;F<br />
-            ${data.data[0].weather.description} <br />
+            ${data.data[0].weather.description} 
+            <br />
+            <br />
+            <hr width=75% align=center class="weather-break">
         `);
   } else {
     $('.left-col').append(`
@@ -195,6 +196,9 @@ function displayWeather(data) {
             It is currently ${data.data[0].temp}&#176; F<br />
             ${data.data[0].weather.description} <br />
             Chance of Rain: ${data.data[0].precip}%
+            <br />
+            <br />
+            <hr width=75% align=center class="weather-break">
     `);
   }
 }
