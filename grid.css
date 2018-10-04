@@ -24,3 +24,10 @@
     padding-right: 1.04166666%;
     width: 50%;
 }
+
+@media only screen and (max-width: 420px) {
+    .col {
+        width: 100%;
+    }
+    
+}
