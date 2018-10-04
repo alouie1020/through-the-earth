@@ -1,6 +1,4 @@
 let MARKERS = [];
-const userIcon = "";
-const antiIcon = "";
 
 function initListener() {
   $('.js-form').on('click', '.js-submit-button', function (event) {
@@ -27,6 +25,7 @@ function initMap(address) {
   }
 }
 
+// Converts user's location to Latitude and Longitude
 function geocodeAddress(geocoder, resultsMap, address) {
   geocoder.geocode({ 'address': address }, function (results, status) {
     removeMarkers();
@@ -34,7 +33,7 @@ function geocodeAddress(geocoder, resultsMap, address) {
       const userLocation = results[0].geometry.location;
       const antipodeLat = results[0].geometry.location.lat() * -1;
       const longitude = results[0].geometry.location.lng();
-      addMarkers(userLocation, userIcon, resultsMap);
+      addMarkers(userLocation, resultsMap);
 
       let antipodeLng;
       if (longitude <= 0) {
@@ -44,7 +43,7 @@ function geocodeAddress(geocoder, resultsMap, address) {
         antipodeLng = longitude - 180;
       }
       const antipodeMarker = { lat: antipodeLat, lng: antipodeLng };
-      addMarkers(antipodeMarker, antiIcon, resultsMap);
+      addMarkers(antipodeMarker, resultsMap);
       runFunctionsByLatLng(antipodeLat, antipodeLng);
       runAnimation();
       scrollButton();
@@ -89,11 +88,10 @@ function scrollButton() {
   });
 }
 
-function addMarkers(location, icon, map) {
+function addMarkers(location, map) {
   const marker = new google.maps.Marker({
     position: location,
-    map: map,
-    icon: icon
+    map: map
   });
   MARKERS.push(marker);
 }
@@ -105,12 +103,13 @@ function removeMarkers() {
   MARKERS = [];
 }
 
+// Runs functions that access APIs that require Latitude and Longitude 
 function runFunctionsByLatLng(antipodeLat, antipodeLng) {
   onWater(antipodeLat, antipodeLng, displayIfOnWater);
   getWeatherData(antipodeLat, antipodeLng, displayWeather)
 }
 
-// Determines if antipode is on water or land using Onwater.io API 
+// Determines if antipode is on water or land  
 function onWater(lat, lon, callback) {
   const waterURL = 'https://api.onwater.io/api/v1/results/';
   const query = {
@@ -146,7 +145,7 @@ function displayIfOnWater(data) {
   }
 }
 
-// Reverse geocodes location to determine on which region/country the user's antipode is  
+// Reverse geocodes antipode's latitude and longitude to determine which country antipode is on 
 function displayAntipodeLocation(lat, lng) {
   const geocoder = new google.maps.Geocoder();
   const latlng = { lat: lat, lng: lng };
