@@ -1,0 +1,26 @@
+.row {
+    max-width: 1000px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 0;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 5px;
+}
+
+.row::before,
+.row::after {
+    display: table;
+    content: '';
+}
+
+.row::after {
+    clear: both;
+}
+
+.col {
+    float: left;
+    padding-left: 1.04166666%;
+    padding-right: 1.04166666%;
+    width: 50%;
+}
