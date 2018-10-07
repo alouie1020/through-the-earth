@@ -26,7 +26,7 @@ Summary
 
 Demo
 ----
-- [Through the Earth Live Demo](https://repl.it/@alouie1020/Through-the-Earth)
+- [Through the Earth Live Demo](https://alouie1020.github.io/through-the-earth/)
 
 Author
 ------
